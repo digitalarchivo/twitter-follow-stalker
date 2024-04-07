@@ -1,0 +1,5 @@
+node_modules
+dist
+config.json
+state.json
+auth.json

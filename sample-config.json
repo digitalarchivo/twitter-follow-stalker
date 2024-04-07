@@ -1,0 +1,11 @@
+{
+	"sniper": {
+		"username": "123",
+		"password": "123"
+	},
+	"webhook": "https://discord.com/api/webhooks/xxx/xxx",
+	"accounts": [
+		"123"
+	],
+	"delay": 5000
+}
