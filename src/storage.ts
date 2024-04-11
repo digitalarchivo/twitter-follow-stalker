@@ -33,6 +33,43 @@ class Storage {
 		return this.state[username] ?? [];
 	}
 
+	setOptimalRatelimitResetLength(length: number) {
+		this.state['$$ratelimit'] = length;
+		this.save();
+	}
+
+	getOptimalRatelimitResetLength() {
+		return this.state['$$ratelimit'] ?? 0;
+	}
+
+	setOptimalRatelimitRemaining(length: number) {
+		this.state['$$ratelimitMaxRemaining'] = length;
+		this.save();
+	}
+
+	getOptimalRatelimitRemaining() {
+		return this.state['$$ratelimitMaxRemaining'] ?? 160;
+	}
+
+	getRatelimitReset() {
+		return this.state['$$ratelimitReset'] ?? 0;
+	}
+
+	setRatelimitReset(length: number) {
+		this.state['$$ratelimitReset'] = length;
+		this.save();
+	}
+
+	getLastRatelimited() {
+		return this.state['$$ratelimitLast'] ?? Date.now();
+	}
+
+	setLastRatelimited(length: number) {
+		this.state['$$ratelimitLast'] = length;
+		this.save();
+	}
+
+
 	save() {
 		const content = JSON.stringify(this.state, null, 2);
 		writeFileSync(this.path, content, 'utf-8');
