@@ -33,19 +33,28 @@ class Interval {
 
 		// const users = await getUsers(...client.config.accounts);
 		for (const user of client.config.accounts) {
-			const following = await request(() => client.instance.v1.userFollowingIds({ screen_name: user, count: 9999999999999 }));
-
+			const following = await request(() => client.instance.v1.userFollowingIds({ screen_name: user }));
 			const newFollowing = client.storage.compare(user, following.data.ids);
 
-			const users = await getUsers(...newFollowing);
+			const users = await getUsers(...newFollowing) as any as UserV1[];
 			if (users.length) {
 				webhook.send(client.config.webhook, {
 					content: [
 						`${user} is now following the following people:`,
 						'',
-						...users.map(r => `(${r.name} (@${r.screen_name}))[${r.url}]`).join('\n')
+						users.map(r => `${r.name} [@${r.screen_name}](https://x.com/${r.screen_name})`.trim()).join('\n')
 					].join('\n')
 				});
+			}
+
+
+			if (following.rateLimit) {
+				const ms = following.rateLimit.reset * 1000;
+
+				console.log('---------------------');
+				console.log('Ratelimit remaining requests bucket:', following.rateLimit.remaining);
+				console.log('Ratelimit bucket reset:', new Date(ms));
+				console.log('---------------------');
 			}
 
 			client.storage.set(user, following.data.ids);

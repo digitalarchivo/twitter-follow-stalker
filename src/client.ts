@@ -16,7 +16,7 @@ export class Client {
 	async connect() {
 		let auth;
 
-		const authPath = join(__dirname, '..', 'auth.json');
+		const authPath = join(__dirname, '..', `auth-${this.config.sniper.username}.json`);
 		if (existsSync(authPath)) {
 			const content = readFileSync(authPath, 'utf-8');
 			auth = JSON.parse(content);

@@ -6,7 +6,7 @@ async function request<T>(callback: () => T | Promise<T>) {
 		try {
 			return await callback();
 		} catch (error) {
-			if (error instanceof ApiResponseError && error.rateLimit) {
+			if (error instanceof ApiResponseError && error.rateLimit?.remaining === 0) {
 				const ms = error.rateLimit.reset * 1000;
 				const timeout = ms - Date.now();
 
@@ -14,6 +14,8 @@ async function request<T>(callback: () => T | Promise<T>) {
 
 				await sleep(timeout);
 				continue;
+			} else {
+				console.error('Encountered error:', error);
 			}
 
 			throw error;
