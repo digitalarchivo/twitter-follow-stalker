@@ -15,6 +15,10 @@ class Storage {
 	}
 
 	compare(username: string, newList: string[]) {
+		if (!this.state[username]) {
+			return [];
+		}
+
 		const current = this.get(username);
 
 		return newList.filter(x => !current.includes(x));
